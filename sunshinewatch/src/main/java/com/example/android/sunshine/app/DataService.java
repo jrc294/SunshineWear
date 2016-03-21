@@ -30,19 +30,16 @@ public class DataService extends WearableListenerService implements GoogleApiCli
 
     @Override
     public void onCreate() {
-        Log.i(LOG_TAG, "onDataChanged onCreate ");
         super.onCreate();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i(LOG_TAG, "onDataChanged onStartCommand");
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
-        Log.i(LOG_TAG, "onDataChanged");
 
         mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
                 .addApi(Wearable.API)
@@ -51,14 +48,12 @@ public class DataService extends WearableListenerService implements GoogleApiCli
                 .build();
         for (DataEvent dataEvent : dataEvents) {
             if (dataEvent.getType() == DataEvent.TYPE_CHANGED) {
-                Log.i(LOG_TAG, "onDataChanged event = TYPE_CHANGED");
                 DataMap dataMap = DataMapItem.fromDataItem(dataEvent.getDataItem()).getDataMap();
                 String path = dataEvent.getDataItem().getUri().getPath();
                 if (path.equals("/temperature")) {
                     mHighTemp = dataMap.getString("high-temp");
                     mLowTemp = dataMap.getString("low-temp");
                     mWeatherIcon = loadBitmapFromAsset(dataMap.getAsset("weather-icon"));
-                    Log.i(LOG_TAG, "onDataChanged temperature = " + mHighTemp);
                 }
 
             }
